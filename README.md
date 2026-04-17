@@ -4,7 +4,7 @@
 
 **一个以 Markdown 内容为核心、基于 VitePress 构建的 AI 知识库站点**
 
-[🔥 在线访问](https://qdleader.github.io/Awesome-AI-Pedia/) | [🚀 快速开始](#-快速开始) | [📚 维护文档](https://qdleader.github.io/Awesome-AI-Pedia/docs/guide/getting-started/)
+[📦 当前仓库](https://github.com/tongtrxtrx-sudo/Awesome-AI-Pedia) | [🚀 快速开始](#-快速开始) | [📚 本地维护文档](./docs/guide/getting-started/index.md)
 
 </div>
 
@@ -13,6 +13,11 @@
 ## ✨ 项目简介
 
 **Awesome AI Pedia** 是一个面向开发者的 AI 知识库仓库，内容覆盖 Claude Code、Cursor、MCP、Prompt、Rules、Skills、部署与实战经验等多个主题。
+
+当前发布仓库：
+
+- Fork 仓库：https://github.com/tongtrxtrx-sudo/Awesome-AI-Pedia
+- 上游仓库：https://github.com/qdleader/Awesome-AI-Pedia
 
 当前仓库采用“内容目录在项目根、站点壳在 `docs/`”的组织方式：
 
@@ -59,7 +64,7 @@ Awesome-AI-Pedia/
 ### 方式一：直接使用 npm 命令
 
 ```bash
-git clone https://github.com/qdleader/Awesome-AI-Pedia.git
+git clone https://github.com/tongtrxtrx-sudo/Awesome-AI-Pedia.git
 cd Awesome-AI-Pedia
 npm install
 npm run dev
@@ -118,6 +123,7 @@ claudeCode/我的新文章.md
 - 目录结构说明：[`docs/guide/directory/index.md`](./docs/guide/directory/index.md)
 - 部署说明：[`docs/guide/deployment/index.md`](./docs/guide/deployment/index.md)
 - 代码库总览：[`CODEBASE.md`](./CODEBASE.md)
+- 上游项目：[`qdleader/Awesome-AI-Pedia`](https://github.com/qdleader/Awesome-AI-Pedia)
 
 ---
 
@@ -131,6 +137,6 @@ claudeCode/我的新文章.md
 
 **如果这个项目对你有帮助，欢迎给一个 Star。**
 
-Made with ❤️ by [qdleader](https://github.com/qdleader)
+Fork maintained at [tongtrxtrx-sudo/Awesome-AI-Pedia](https://github.com/tongtrxtrx-sudo/Awesome-AI-Pedia)
 
 </div>
