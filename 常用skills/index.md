@@ -1,63 +1,24 @@
 ---
 layout: doc
-title: 常用Skills
+title: 常用skills
+description: 常用skills 分类索引
 ---
 
-# 常用Skills
+# 常用skills
 
 本分类包含以下内容：
 
-<div class="article-list">
-
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/Awesome-AI-Pedia/ai/chang-yong-skills/ code-simplifier 插件安装"> code-simplifier 插件安装</a>
-    </div>
-  </div>
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/Awesome-AI-Pedia/ai/chang-yong-skills/Superpowers">Superpowers</a>
-    </div>
-  </div>
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/Awesome-AI-Pedia/ai/chang-yong-skills/Superpowers安装及使用">Superpowers安装及使用</a>
-    </div>
-  </div>
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/Awesome-AI-Pedia/ai/chang-yong-skills/code-simplifier的提示词">code-simplifier的提示词</a>
-    </div>
-  </div>
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/Awesome-AI-Pedia/ai/chang-yong-skills/my-skill-brand">my-skill-brand</a>
-    </div>
-  </div>
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/Awesome-AI-Pedia/ai/chang-yong-skills/ui ux pro max">ui ux pro max</a>
-    </div>
-  </div>
-</div>
-
-<style>
-.article-list {
-  margin-top: 2rem;
-}
-.article-item {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-.article-item-title {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-.article-item-title a {
-  color: var(--vp-c-brand);
-  text-decoration: none;
-}
-.article-item-title a:hover {
-  text-decoration: underline;
-}
-</style>
+- [脑机接口EvoMap](./脑机接口EvoMap)
+- [Claude-Code浏览器自动化方案对比](./Claude-Code浏览器自动化方案对比)
+- [claude-mem](./claude-mem)
+- [code-simplifier-插件安装🌟🌟🌟🌟](./code-simplifier-插件安装🌟🌟🌟🌟)
+- [code-simplifier的提示词](./code-simplifier的提示词)
+- [dev-browser🌟🌟🌟](./dev-browser🌟🌟🌟)
+- [everything-claudecode](./everything-claudecode)
+- [my-skill-brand](./my-skill-brand)
+- [oh-my-claudecode](./oh-my-claudecode)
+- [remotions-skills](./remotions-skills)
+- [skill-creator🌟🌟🌟](./skill-creator🌟🌟🌟)
+- [skills的排行榜大全](./skills的排行榜大全)
+- [Superpowers](./Superpowers)
+- [Superpowers安装及使用🌟🌟🌟🌟🌟](./Superpowers安装及使用🌟🌟🌟🌟🌟)

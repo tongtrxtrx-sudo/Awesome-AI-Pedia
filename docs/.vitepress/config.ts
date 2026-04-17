@@ -33,7 +33,7 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: false, // 🔧 修复：关闭 cleanUrls 避免 404
   ignoreDeadLinks: true,
-  appearance: 'dark', // 默认使用暗黑主题
+  appearance: true,
 
   // 🔧 添加路由重写规则，修复 404 问题
   rewrites: {

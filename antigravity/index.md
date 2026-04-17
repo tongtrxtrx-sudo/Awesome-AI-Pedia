@@ -1,43 +1,15 @@
 ---
 layout: doc
-title: Antigravity
+title: antigravity
+description: antigravity 分类索引
 ---
 
-# Antigravity
+# antigravity
 
 本分类包含以下内容：
 
-<div class="article-list">
-
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/ai/antigravity/antigravity-如何自动accept">antigravity 如何自动accept</a>
-    </div>
-  </div>
-  <div class="article-item">
-    <div class="article-item-title">
-      <a href="/ai/antigravity/antigravity-自动切换账号">antigravity 自动切换账号</a>
-    </div>
-  </div>
-</div>
-
-<style>
-.article-list {
-  margin-top: 2rem;
-}
-.article-item {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-.article-item-title {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-.article-item-title a {
-  color: var(--vp-c-brand);
-  text-decoration: none;
-}
-.article-item-title a:hover {
-  text-decoration: underline;
-}
-</style>
+- [自动预热插件](./自动预热插件)
+- [antigravity Skills 全局安装与配置](./antigravity%20Skills%20全局安装与配置)
+- [antigravity Skills 项目级安装与配置](./antigravity%20Skills%20项目级安装与配置)
+- [antigravity-如何自动accept](./antigravity-如何自动accept)
+- [antigravity-自动切换账号](./antigravity-自动切换账号)

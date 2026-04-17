@@ -92,7 +92,7 @@ features:
 npm run dev
 ```
 
-访问 `http://localhost:3000` 即可看到你的博客！
+访问 `http://localhost:5173` 即可看到你的博客！
 
 ## 配置文件详解
 

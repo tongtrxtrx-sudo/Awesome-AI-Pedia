@@ -55,14 +55,14 @@
   bottom: -100px;
   border-radius: 50%;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(224, 247, 250, 0.3) 100%
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(var(--phycat-primary-rgb), 0.12) 100%
   );
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(var(--phycat-primary-rgb), 0.16);
   box-shadow: 
-    0 8px 32px rgba(100, 108, 255, 0.1),
-    inset 0 0 20px rgba(255, 255, 255, 0.3);
+    0 8px 32px rgba(var(--phycat-primary-rgb), 0.08),
+    inset 0 0 20px rgba(255, 255, 255, 0.16);
   animation: floatUp 20s infinite ease-in-out;
 }
 
@@ -98,13 +98,13 @@
   width: 4px;
   height: 4px;
   background: radial-gradient(circle, 
-    rgba(100, 108, 255, 0.8) 0%,
-    rgba(116, 123, 255, 0.4) 50%,
+    rgba(var(--phycat-primary-rgb), 0.8) 0%,
+    rgba(var(--phycat-secondary-rgb), 0.45) 50%,
     transparent 100%
   );
   border-radius: 50%;
   animation: twinkle 3s infinite ease-in-out;
-  box-shadow: 0 0 10px rgba(100, 108, 255, 0.5);
+  box-shadow: 0 0 10px rgba(var(--phycat-primary-rgb), 0.4);
 }
 
 @keyframes twinkle {
@@ -125,10 +125,10 @@
 
 .dark .bubble {
   background: linear-gradient(135deg, 
-    rgba(100, 108, 255, 0.2) 0%,
-    rgba(116, 123, 255, 0.15) 100%
+    rgba(var(--phycat-primary-rgb), 0.14) 0%,
+    rgba(var(--phycat-secondary-rgb), 0.12) 100%
   );
-  border-color: rgba(100, 108, 255, 0.3);
+  border-color: rgba(var(--phycat-secondary-rgb), 0.22);
 }
 
 /* 响应式优化 */

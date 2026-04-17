@@ -1,246 +1,135 @@
 ---
 title: 目录结构说明
-description: 详细了解博客项目的目录结构和各个文件的作用
+description: 详细了解 Awesome AI Pedia 当前的目录组织方式和路由生成规则
 ---
 
 # 目录结构说明
 
-本文档详细说明了Awesome AI Pedia博客项目的目录结构，帮助你更好地理解和管理项目。
+本文档描述的是仓库当前真实结构，而不是早期的模板式博客目录。
 
 ## 项目根目录
 
+```text
+Awesome-AI-Pedia/
+├── docs/                      # 站点壳、首页、维护文档和 VitePress 配置
+├── claudeCode/                # 根目录主题内容
+├── cursor/                    # 根目录主题内容
+├── mcp/                       # 根目录主题内容
+├── prompt/                    # 根目录主题内容
+├── rules/                     # 根目录主题内容
+├── skills/                    # 根目录主题内容
+├── 其他一级主题目录...
+├── .github/                   # GitHub Actions
+├── package.json               # npm 脚本和依赖
+├── README.md                  # 对外说明
+└── CODEBASE.md                # 代码库总览
 ```
-awesome-ai-pedia/
-├── docs/                      # 文档根目录
-├── public/                    # 静态资源目录
-├── package.json              # 项目依赖和脚本
-├── README.md                  # 项目说明文档
-└── .gitignore                 # Git忽略文件
-```
+
+## 结构总览
+
+这个项目采用“双层结构”：
+
+- `docs/` 提供 VitePress 站点壳
+- 项目根目录下的主题文件夹提供主要内容
+
+也就是说，当前站点不是只渲染 `docs/` 内的内容，而是通过 `srcDir: '../'` 把项目根目录纳入内容源。
 
 ## docs/ 目录
 
-`docs/`目录是VitePress的核心目录，包含所有的页面内容和配置文件。
+`docs/` 目录主要承担站点框架职责：
 
-### docs/.vitepress/ 子目录
-
-存放VitePress的配置文件：
-
+```text
+docs/
+├── .vitepress/
+│   ├── config.ts              # 站点主配置
+│   ├── theme.ts               # 主题扩展
+│   ├── components/            # 首页与主题组件
+│   ├── styles/                # 自定义样式
+│   └── utils/sidebar.ts       # 动态导航与侧边栏生成逻辑
+├── guide/                     # 维护文档
+├── blog/                      # 补充说明类页面
+├── public/                    # 静态资源
+└── index.md                   # 首页
 ```
-.vitepress/
-├── config.ts              # 主配置文件（必需）
-├── theme.ts               # 自定义主题配置
-├── custom.css             # 自定义样式
-├── components/             # 自定义组件
-│   └── BlogMeta.vue       # 博客元数据组件
-└── cache/                 # 缓存目录（自动生成）
-```
 
-#### config.ts
+### `docs/.vitepress/config.ts`
 
-主配置文件，定义：
+负责：
+
 - 站点元数据（标题、描述、语言）
-- 导航栏配置
-- 侧边栏配置
-- 主题设置
-- 构建选项
+- 根目录内容接入（`srcDir: '../'`）
+- 构建时排除目录
+- `base`、搜索、编辑链接等站点行为
+- 调用动态导航和侧边栏生成函数
 
-#### theme.ts
+### `docs/.vitepress/utils/sidebar.ts`
 
-自定义主题配置：
-- 扩展默认主题
-- 注册全局组件
-- 自定义布局
+负责：
 
-#### custom.css
+- 扫描项目根目录的内容文件夹
+- 为每个内容文件夹生成侧边栏
+- 生成顶部导航
+- 为 `docs/blog` 和 `docs/guide` 提供固定入口
 
-自定义样式文件：
-- 主题色配置
-- 组件样式覆盖
-- 响应式设计
-- 动画效果
+### `docs/index.md`
 
-#### components/
+首页文件，实际内容由多个 Vue 组件拼装。
 
-存放Vue组件：
-- `BlogMeta.vue`: 显示文章时间、作者、阅读量
-- 可添加更多自定义组件
+## 根目录内容目录
 
-### docs/blog/ 目录
+根目录下的大多数一级文件夹都是内容分区，例如：
 
-博客文章目录，支持多级分类：
-
-```
-blog/
-├── ai-development/         # AI开发分类
-│   └── index.md          # 分类索引页
-├── ai-assistant/          # AI助手分类
-│   └── index.md          # 分类索引页
-└── vitepress-guide/       # VitePress指南
-    └── index.md          # 分类索引页
+```text
+claudeCode/
+cursor/
+mcp/
+prompt/
+rules/
+skills/
+部署ai/
+常用skills/
+...
 ```
 
-**命名规则：**
-- 目录名使用中划线分隔：`my-category`
-- 必须包含`index.md`文件
-- MD文件支持Front Matter元数据
+这些目录中的 Markdown 会被当作站点页面直接渲染。
 
-### docs/guide/ 目录
+### 路由规则
 
-使用指南目录：
+- 目录名和文件名会直接参与生成 URL
+- 一级目录的 URL 前缀就是目录名本身
+- `index.md` 会生成该目录的入口页
+- 非 `index.md` 文件会变成正文页面
+- 大小写、空格和中文会原样进入路径
 
-```
-guide/
-├── getting-started/       # 快速开始
-│   └── index.md
-├── directory/             # 目录说明
-│   └── index.md
-└── deployment/            # 部署指南
-    └── index.md
-```
+### 顶部导航生成规则
 
-### docs/public/ 目录
-
-静态资源目录，这些文件会直接复制到构建输出：
-
-```
-public/
-├── images/               # 图片资源
-│   ├── logo.png         # 网站logo
-│   └── banner.jpg       # 首页banner
-├── favicon.ico          # 网站图标
-└── robots.txt           # 搜索引擎配置
-```
-
-### docs/index.md
-
-网站首页文件，支持hero配置和功能卡片。
-
-## public/ 目录
-
-项目根级别的public目录，用于存放根级别的静态资源。
-
-## 文件命名规范
-
-### Markdown文件
-
-- **首页**: `index.md`
-- **普通页面**: 使用有意义的名称，如`about.md`
-- **分类目录**: 使用中划线分隔，如`ai-development/`
-
-### 图片文件
-
-- **Logo**: `logo.png`
-- **图标**: 使用`favicon.ico`
-- **文章图片**: 存放在`public/images/`下，使用描述性名称
-
-## Front Matter字段
-
-每个Markdown文件顶部的YAML格式元数据：
-
-```markdown
----
-title: 页面标题                    # 页面标题（必需）
-date: 2024-01-26                   # 日期（必需）
-author: 作者姓名                   # 作者（必需）
-readingTime: 5 分钟阅读            # 阅读时间（必需）
-tags:                             # 标签数组
-  - 标签1
-  - 标签2
-description: 页面描述               # SEO描述（必需）
-image: /images/cover.jpg           # 封面图（可选）
----
-```
-
-## 自动生成内容
-
-### 侧边栏
-
-侧边栏内容可以在`config.ts`中静态定义，也可以通过代码自动生成：
-
-```typescript
-async function generateSidebar() {
-  // 读取所有Markdown文件
-  // 生成侧边栏结构
-  return sidebar
-}
-```
-
-### 导航栏
-
-在`config.ts`的`themeConfig.nav`中配置：
-
-```typescript
-nav: [
-  { text: '首页', link: '/' },
-  { text: '博客', link: '/blog/' },
-  {
-    text: '分类',
-    items: [
-      { text: '开发技巧', link: '/blog/development/' }
-    ]
-  }
-]
-```
-
-## 最佳实践
-
-### 1. 文件组织
-
-- 将相关主题的文章放在同一分类下
-- 使用描述性的文件名和目录名
-- 保持目录层级不超过3级
-
-### 2. 图片管理
-
-- 图片统一存放在`public/images/`下
-- 使用相对路径引用：`/images/logo.png`
-- 图片大小建议小于500KB
-
-### 3. 内容结构
-
-- 每篇文章包含完整的Front Matter
-- 使用标题层级构建清晰的目录
-- 适当使用代码块和示例
-
-### 4. 链接管理
-
-- 内部链接使用相对路径：`/blog/article/`
-- 外部链接自动添加图标（已在主题中配置）
-- 确保所有链接都有意义和描述性
+- 一级内容目录如果在根目录下至少有一篇非 `index.md` Markdown，顶部导航就会自动生成一项
+- 这项导航默认会链接到该目录按字母序排序后的第一篇文章
+- 如果一级目录只有子目录、没有根级文章，侧边栏可以生成，但顶部导航不会出现
 
 ## 常见问题
 
 ### Q: 如何添加新分类？
 
-A: 在`docs/blog/`下创建新目录，添加`index.md`文件，然后在`config.ts`的侧边栏配置中添加条目。
+A: 直接在项目根目录创建新文件夹，并放入至少一篇非 `index.md` Markdown。侧边栏通常不需要手工维护。
 
-### Q: 如何修改主题色？
+### Q: 为什么有些页面在 `/docs/...`，有些页面在 `/claudeCode/...`？
 
-A: 编辑`docs/.vitepress/custom.css`，修改CSS变量：
+A: 因为仓库同时存在两类内容：
 
-```css
-:root {
-  --vp-c-brand: #646cff;
-}
-```
+- `docs/` 下的是站点壳和维护说明
+- 根目录主题文件夹下的是主知识内容
 
-### Q: 如何添加自定义页面？
+### Q: 新建分类后为什么顶部导航没有出现？
 
-A: 在`docs/`下创建新的Markdown文件，如`about.md`，然后在导航栏配置中添加链接。
+A: 因为顶部导航只会读取一级目录中“直接位于该目录下”的非 `index.md` Markdown 文件。仅有子目录时不会生成导航入口。
 
-### Q: 如何隐藏页面？
+### Q: 为什么某些路径包含空格或大小写？
 
-A: 在Front Matter中添加`sidebar: false`：
+A: 当前路由策略会直接使用真实目录名和文件名，所以路径对大小写和命名风格敏感。
 
-```markdown
----
-sidebar: false
----
-```
+## 参考位置
 
-## 参考资源
-
-- [VitePress目录结构文档](https://vitepress.vuejs.org/guide/directory-structure)
-- [Vue.js组件系统](https://cn.vuejs.org/guide/components)
-- [Vite构建配置](https://vitejs.cn/config/)
+- 仓库根目录：`CODEBASE.md`
+- 站点主配置：`docs/.vitepress/config.ts`
+- 导航生成逻辑：`docs/.vitepress/utils/sidebar.ts`

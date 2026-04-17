@@ -7,7 +7,7 @@
       target="_blank" 
       class="feature-card"
     >
-<div class="feature-icon" v-html="feature.icon"></div>
+      <div class="feature-icon" v-html="feature.icon"></div>
       <h3 class="feature-title">{{ feature.title }}</h3>
       <p class="feature-desc">{{ feature.description }}</p>
       <div class="feature-hover-bg"></div>
@@ -57,12 +57,12 @@ const features = [
   align-items: center;
   text-align: center;
   padding: 2.5rem 2rem;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: var(--vp-c-bg-elv);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--phycat-border);
   border-radius: 20px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 16px rgba(100, 108, 255, 0.08);
+  box-shadow: var(--phycat-glow-soft);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
@@ -71,8 +71,8 @@ const features = [
 
 .feature-card:hover {
   transform: translateY(-12px) scale(1.03);
-  box-shadow: 0 20px 40px rgba(100, 108, 255, 0.2);
-  border-color: rgba(100, 108, 255, 0.4);
+  box-shadow: var(--phycat-glow-strong);
+  border-color: var(--phycat-border-strong);
 }
 
 /* Feature 图标 */
@@ -83,14 +83,14 @@ const features = [
   display: inline-block;
   margin-bottom: 1.5rem;
   animation: breathe 3s ease-in-out infinite;
-  filter: drop-shadow(0 4px 8px rgba(100, 108, 255, 0.2));
+  filter: drop-shadow(0 8px 16px rgba(var(--phycat-primary-rgb), 0.18));
   transition: all 0.4s ease;
   color: var(--vp-c-brand-1);
 }
 
 .feature-card:hover .feature-icon {
   transform: scale(1.15) rotate(5deg);
-  filter: drop-shadow(0 8px 16px rgba(100, 108, 255, 0.3));
+  filter: drop-shadow(0 12px 20px rgba(var(--phycat-primary-rgb), 0.24));
 }
 
 @keyframes breathe {
@@ -132,7 +132,7 @@ const features = [
   height: 0;
   border-radius: 50%;
   background: radial-gradient(circle, 
-    rgba(100, 108, 255, 0.1) 0%,
+    rgba(var(--phycat-primary-rgb), 0.12) 0%,
     transparent 70%
   );
   transform: translate(-50%, -50%);
@@ -147,13 +147,13 @@ const features = [
 
 /* 暗黑模式适配 */
 .dark .feature-card {
-  background: rgba(30, 30, 30, 0.7);
-  border-color: rgba(100, 108, 255, 0.2);
+  background: var(--vp-c-bg-elv);
+  border-color: var(--phycat-border);
 }
 
 .dark .feature-card:hover {
-  background: rgba(40, 40, 40, 0.85);
-  border-color: rgba(100, 108, 255, 0.4);
+  background: color-mix(in srgb, var(--vp-c-bg-elv), var(--phycat-secondary) 6%);
+  border-color: var(--phycat-border-strong);
 }
 
 /* 响应式优化 */

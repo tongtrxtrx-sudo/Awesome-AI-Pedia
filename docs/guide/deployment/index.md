@@ -1,277 +1,91 @@
 ---
 title: 部署指南
-description: 学习如何将VitePress博客部署到各种平台
+description: 学习如何按照仓库当前配置部署 Awesome AI Pedia
 ---
 
 # 部署指南
 
-本文档详细说明如何将Awesome AI Pedia博客部署到各种平台，包括GitHub Pages、Vercel、Netlify等。
+本文档只描述仓库当前已经落地的部署方式和需要注意的配置项。
 
 ## 本地构建
 
-在部署之前，先在本地测试构建：
+在部署之前，先在本地验证构建：
 
 ```bash
-# 安装依赖
 npm install
-
-# 构建静态文件
 npm run build
-
-# 预览构建结果
-npm run serve
 ```
 
-构建完成后，`dist`目录包含所有静态文件。
+构建完成后，静态产物位于：
 
-## 部署到GitHub Pages
-
-GitHub Pages是最简单的部署方式，完全免费。
-
-### 方式一：GitHub Actions（推荐）
-
-#### 1. 创建工作流文件
-
-创建`.github/workflows/deploy.yml`：
-
-```yaml
-name: Deploy VitePress site to GitHub Pages
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build with VitePress
-        run: npm run build
-        env:
-          # 如果使用Algolia搜索
-          VITE_ALGOLIA_APP_ID: ${{ secrets.VITE_ALGOLIA_APP_ID }}
-          VITE_ALGOLIA_API_KEY: ${{ secrets.VITE_ALGOLIA_API_KEY }}
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+```text
+docs/.vitepress/dist
 ```
 
-#### 2. 配置仓库
+## 部署到 GitHub Pages
 
-1. 进入GitHub仓库的**Settings** > **Pages**
-2. Source选择**GitHub Actions**
-3. 保存设置
+当前仓库已经内置 GitHub Actions 工作流，文件位置是：
 
-#### 3. 提交代码
-
-```bash
-git add .
-git commit -m "feat: 添加GitHub Actions部署配置"
-git push origin main
+```text
+.github/workflows/blank.yml
 ```
 
-#### 4. 查看部署
+### 当前工作流行为
 
-进入**Actions**页面查看部署进度：
-`https://github.com/username/repo/actions`
+- 监听 `master` 分支推送
+- 使用 Node.js `20.18.1`
+- 执行 `npm i`
+- 执行 `npm run build`
+- 将 `docs/.vitepress/dist` 发布到 `gh-pages`
 
-部署完成后，访问：
-`https://username.github.io/repo-name/`
+### 关键点
 
-### 方式二：手动部署
+- 站点 `base` 当前固定为 `/Awesome-AI-Pedia/`
+- GitHub Pages 场景下，这个配置与仓库名匹配
+- 如果未来改仓库名，必须同步修改 `docs/.vitepress/config.ts`
 
-```bash
-# 构建项目
-npm run build
+## 部署到 Vercel
 
-# 安装gh-pages
-npm install -g gh-pages
-
-# 部署到GitHub Pages
-gh-pages -d dist
-```
-
-## 部署到Vercel
-
-Vercel提供免费的静态网站托管服务。
-
-### 1. 安装Vercel CLI
-
-```bash
-npm install -g vercel
-```
-
-### 2. 部署
-
-```bash
-vercel
-```
-
-按提示操作：
-- 设置并部署：Y
-- 链接到现有项目：N
-- 项目名称：输入项目名
-- 目录：`docs`（因为VitePress配置在docs目录）
-
-### 3. 配置
-
-创建`vercel.json`：
+仓库已包含 `vercel.json`，核心行为是：
 
 ```json
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm install"
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "destination": "/:path*.html"
+    }
+  ],
+  "cleanUrls": false,
+  "trailingSlash": false
 }
 ```
 
-### 4. 自动部署
+### 使用建议
 
-连接GitHub仓库后，每次推送代码会自动部署。
+- Build Command: `npm run build`
+- Output Directory: `docs/.vitepress/dist`
+- 如果部署域名不是仓库子路径，而是根域名，需要同步调整 `base`
 
-## 部署到Netlify
+## 部署到 Netlify
 
-Netlify是另一个优秀的静态网站托管平台。
+仓库已包含 `netlify.toml`，当前配置的发布目录也是：
 
-### 1. 安装Netlify CLI
-
-```bash
-npm install -g netlify-cli
+```text
+docs/.vitepress/dist
 ```
 
-### 2. 部署
-
-```bash
-netlify deploy --prod
-```
-
-按提示操作。
-
-### 2. 配置文件
-
-创建`netlify.toml`：
-
-```toml
-[build]
-  command = "npm run build"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "18"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-```
-
-## 部署到Cloudflare Pages
-
-Cloudflare提供全球CDN加速。
-
-### 1. 安装Wrangler CLI
-
-```bash
-npm install -g wrangler
-```
-
-### 2. 登录Cloudflare
-
-```bash
-wrangler login
-```
-
-### 3. 创建项目
-
-```bash
-wrangler pages project create awesome-ai-pedia
-```
-
-### 4. 部署
-
-```bash
-npm run build
-wrangler pages deploy dist
-```
+并且附带了一个兜底重写规则，把未知路径回退到 `index.html`。
 
 ## 部署到云服务器
 
-如果你有自己的云服务器（如阿里云、腾讯云等），可以通过以下方式部署。
+如果使用自己的服务器，上传目录同样是：
 
-### 1. 构建项目
-
-```bash
-npm run build
+```text
+docs/.vitepress/dist
 ```
 
-### 2. 上传文件
-
-将`dist`目录上传到服务器：
-
-```bash
-# 使用rsync（推荐）
-rsync -avz --delete dist/ user@server:/var/www/html/
-
-# 或使用scp
-scp -r dist/* user@server:/var/www/html/
-```
-
-### 3. 配置Nginx
-
-创建Nginx配置文件：
+### Nginx 示例
 
 ```nginx
 server {
@@ -280,201 +94,43 @@ server {
     root /var/www/html;
     index index.html;
 
-    # 支持SPA路由
     location / {
         try_files $uri $uri/ /index.html;
     }
-
-    # 静态资源缓存
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-
-    # 开启gzip压缩
-    gzip on;
-    gzip_types text/plain text/css application/json application/javascript;
 }
-```
-
-### 4. 重启Nginx
-
-```bash
-sudo nginx -t
-sudo systemctl reload nginx
-```
-
-## 自定义域名配置
-
-### GitHub Pages
-
-1. 在`public`目录创建`CNAME`文件：
-```bash
-echo "your-domain.com" > public/CNAME
-```
-
-2. 在域名服务商处添加CNAME记录：
-```
-类型: CNAME
-名称: www（或@）
-值: username.github.io
-```
-
-### Vercel
-
-1. 在Vercel控制台进入项目设置
-2. 点击**Domains**
-3. 添加自定义域名
-4. 按提示配置DNS记录
-
-### Netlify
-
-1. 在Netlify控制台进入站点设置
-2. 点击**Domain management**
-3. 添加自定义域名
-
-### Cloudflare Pages
-
-1. 在Cloudflare控制台进入项目
-2. 点击**Custom domains**
-3. 添加域名并配置DNS记录
-
-## HTTPS配置
-
-大多数平台（Vercel、Netlify、Cloudflare Pages）都自动提供HTTPS。
-
-如果你使用自己的服务器，可以使用Let's Encrypt获取免费SSL证书：
-
-```bash
-# 安装certbot
-sudo apt install certbot python3-certbot-nginx
-
-# 获取证书
-sudo certbot --nginx -d your-domain.com
-
-# 自动续期
-sudo crontab -e
-# 添加：
-0 12 * * * /usr/bin/certbot renew --quiet
-```
-
-## 性能优化
-
-### 1. 启用CDN
-
-所有主要平台都提供CDN加速，确保已启用。
-
-### 2. 资源压缩
-
-在`vite.config.ts`中启用压缩：
-
-```typescript
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
-
-export default defineConfig({
-  plugins: [
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
-      manifest: {
-        name: 'Awesome AI Pedia',
-        short_name: 'AI Pedia',
-        theme_color: '#646cff'
-      }
-    })
-  ]
-})
-```
-
-### 3. 图片优化
-
-- 使用WebP格式
-- 压缩图片大小
-- 使用懒加载
-
-### 4. 缓存策略
-
-配置适当的缓存头：
-
-```
-Cache-Control: public, max-age=31536000  # 静态资源
-Cache-Control: public, max-age=3600      # HTML文件
-```
-
-## 监控与分析
-
-### Google Analytics
-
-在`config.ts`中添加：
-
-```typescript
-export default defineConfig({
-  head: [
-    ['script', { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID' }],
-    ['script', {}, `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'GA_TRACKING_ID');
-    `]
-  ]
-})
-```
-
-### Vercel Analytics
-
-```bash
-npm install @vercel/analytics
-```
-
-在`theme.ts`中导入：
-
-```typescript
-import { inject } from '@vercel/analytics'
-inject()
 ```
 
 ## 常见问题
 
-### Q: 部署后页面404？
+### Q: 部署后页面 404？
 
-A: 需要配置服务器支持SPA路由（Nginx的`try_files`配置）。
+A: 优先检查三件事：
+
+- `docs/.vitepress/config.ts` 中的 `base`
+- 实际发布目录是否是 `docs/.vitepress/dist`
+- 托管平台是否为 `.html` 路径或历史路由配置了重写
 
 ### Q: 资源加载失败？
 
-A: 检查`base`配置是否正确。
+A: 大多数情况是 `base` 与部署路径不匹配。
 
 ```typescript
 export default defineConfig({
-  base: '/repo-name/',  // GitHub Pages
-  // 或
-  base: '/',  // 自定义域名
+  base: '/Awesome-AI-Pedia/'
 })
 ```
 
 ### Q: 部署失败？
 
 A: 检查构建日志，常见问题：
-- Node.js版本不兼容
+
+- Node.js 版本不兼容
 - 依赖安装失败
 - 构建脚本错误
 
-### Q: 如何备份？
+## 参考位置
 
-A: Git仓库本身就是备份，也可以定期导出静态文件。
-
-## 推荐部署方案
-
-- **个人博客**: GitHub Pages（免费、简单）
-- **团队项目**: Vercel（免费、自动部署）
-- **企业应用**: 云服务器（可控、灵活）
-- **全球加速**: Cloudflare Pages（CDN强大）
-
-## 参考资源
-
-- [VitePress部署文档](https://vitepress.vuejs.org/guide/deploying)
-- [GitHub Pages指南](https://pages.github.com/)
-- [Vercel文档](https://vercel.com/docs)
-- [Netlify文档](https://docs.netlify.com/)
-- [Cloudflare Pages文档](https://developers.cloudflare.com/pages/)
+- GitHub Actions 工作流：`.github/workflows/blank.yml`
+- Vercel 配置：`vercel.json`
+- Netlify 配置：`netlify.toml`
+- VitePress 主配置：`docs/.vitepress/config.ts`
